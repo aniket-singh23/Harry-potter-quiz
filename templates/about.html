@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Sorting Hat Quiz</title>
+    <style>
+        :root {
+            --bg: #0b0e16;
+            --panel: rgba(16, 20, 31, 0.74);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text: #f6f2ea;
+            --muted: rgba(246, 242, 234, 0.78);
+            --gold: #d9b15f;
+            --gold-2: #f0d68a;
+            --purple: #5961ff;
+            --shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.06), transparent 16%),
+                radial-gradient(circle at 85% 24%, rgba(255, 255, 255, 0.05), transparent 18%),
+                radial-gradient(circle at 50% 55%, rgba(255, 210, 120, 0.08), transparent 22%),
+                linear-gradient(180deg, #0a0d15 0%, var(--bg) 50%, #0a0d15 100%);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1.6px),
+                radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1.6px);
+            background-size: 120px 120px, 190px 190px;
+            background-position: 0 0, 50px 80px;
+            opacity: 0.22;
+            pointer-events: none;
+        }
+
+        .page {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wrap {
+            width: min(1540px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 28px 0 38px;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            align-items: center;
+            gap: 42px;
+            padding: 0 10px 30px;
+        }
+
+        .art,
+        .copy {
+            position: relative;
+        }
+
+        .art {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 620px;
+        }
+
+        .art::before {
+            content: "";
+            position: absolute;
+            inset: 10% 14% 8% 10%;
+            background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.08) 34%, rgba(255, 255, 255, 0.02) 58%, transparent 72%);
+            filter: blur(10px);
+            border-radius: 48% 52% 45% 55% / 50% 46% 54% 50%;
+            opacity: 0.8;
+        }
+
+        .profile-card {
+            position: relative;
+            width: min(100%, 700px);
+            padding: 26px;
+            border-radius: 28px;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 24px;
+            object-fit: cover;
+            box-shadow: 0 24px 38px rgba(0, 0, 0, 0.55);
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .badge {
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .copy {
+            display: grid;
+            justify-items: center;
+            text-align: center;
+            gap: 18px;
+            padding: 22px 12px;
+        }
+
+        .logo {
+            width: 220px;
+            max-width: 70%;
+            height: auto;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
+        }
+
+        .eyebrow {
+            margin-top: 6px;
+            font-size: 0.96rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold-2);
+            font-weight: 800;
+        }
+
+        h1 {
+            font-family: "Times New Roman", Georgia, serif;
+            font-size: clamp(3rem, 5vw, 5.4rem);
+            line-height: 0.98;
+            letter-spacing: -0.02em;
+            text-wrap: balance;
+            max-width: 860px;
+            text-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .lead {
+            max-width: 720px;
+            font-size: 1.08rem;
+            line-height: 1.7;
+            color: var(--muted);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 240px;
+            padding: 18px 28px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+        }
+
+        .button.primary {
+            color: #fff;
+            background: linear-gradient(135deg, #5e66ff 0%, #4f57ff 100%);
+            box-shadow: 0 16px 30px rgba(79, 87, 255, 0.35);
+        }
+
+        .button.secondary {
+            min-width: 168px;
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-grid {
+            width: min(1100px, 100%);
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .info-card {
+            padding: 24px;
+            border-radius: 24px;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+            text-align: left;
+        }
+
+        .info-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-family: "Times New Roman", Georgia, serif;
+        }
+
+        .info-card p,
+        .info-card li {
+            color: var(--muted);
+            line-height: 1.75;
+        }
+
+        .info-card ul {
+            padding-left: 18px;
+            display: grid;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .footer-note {
+            margin-top: 16px;
+            color: rgba(255, 255, 255, 0.52);
+            font-size: 0.92rem;
+        }
+
+        @media (max-width: 1180px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                min-height: auto;
+            }
+
+            .art {
+                min-height: 420px;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .wrap {
+                width: min(100% - 24px, 1540px);
+                padding-top: 14px;
+            }
+
+            .art {
+                min-height: 300px;
+            }
+
+            .profile-card {
+                padding: 16px;
+            }
+
+            .logo {
+                width: 190px;
+            }
+
+            h1 {
+                font-size: clamp(2.4rem, 10vw, 4rem);
+            }
+
+            .lead {
+                font-size: 1rem;
+            }
+
+            .button {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="wrap">
+            <section class="hero">
+                <div class="art" aria-hidden="true">
+                    <div class="profile-card">
+                        <img class="profile-image" src="https://avatars.githubusercontent.com/u/218330973?v=4" alt="Aniket Singh profile picture">
+                        <div class="badge-row">
+                            <span class="badge">aniket-singh23</span>
+                            <span class="badge">Rapur, Chhattisgarh</span>
+                            <span class="badge">Still in learning phase</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="copy">
+                    <img class="logo" src="https://www.harrypotter.com/_next/static/images/logo-gold-600-7a7e89b6db1ffeaab025f2091d21b645.png" alt="Harry Potter logo">
+                    <div class="eyebrow">About the creator</div>
+                    <h1>Building playful web experiences with a Hogwarts twist.</h1>
+                    <p class="lead">
+                        This project was created by Aniket Singh, who describes himself as still in the learning phase.
+                        The Sorting Hat Quiz turns that idea into a fast Flask experience with a darker, cinematic style
+                        that now matches the home page more closely.
+                    </p>
+                    <div class="actions">
+                        <a class="button primary" href="{{ url_for('quiz') }}">Take the quiz</a>
+                        <a class="button secondary" href="{{ url_for('home') }}">Back home</a>
+                    </div>
+
+                    <div class="info-grid">
+                        <article class="info-card">
+                            <h2>What this project does</h2>
+                            <p>
+                                Harry Potter Quiz sorts users into four custom houses based on their answers. The app is
+                                designed to feel quick, visually rich, and easy to navigate.
+                            </p>
+                            <ul>
+                                <li>Three-question sorting quiz</li>
+                                <li>House scoring and result screen</li>
+                                <li>Dark fantasy-inspired visuals</li>
+                            </ul>
+                        </article>
+
+                        <article class="info-card">
+                            <h2>Profile highlights</h2>
+                            <p>
+                                Public GitHub details used for this page include the creator name, profile image, location,
+                                and current learning status.
+                            </p>
+                            <ul>
+                                <li>GitHub: aniket-singh23</li>
+                                <li>Location: Rapur, Chhattisgarh</li>
+                                <li>Focus: Flask, HTML, UI design</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <p class="footer-note">A Hogwarts-inspired landing page for the Sorting Hat quiz.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
